@@ -1,0 +1,18 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  tomcat:
+    uri-encoding: utf-8
+    # tomcat 最大线程数，默认值为200
+    max-threads: 200
+    min-spare-threads: 20
+
+
+spring:
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    cache: true
+  profiles:
+    active: druid
