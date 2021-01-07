@@ -22,4 +22,9 @@ public class SysIndexController {
 
         return "index";
     }
+
+    @GetMapping("/main")
+    public String main(ModelMap modelMap){
+        return "main";
+    }
 }
