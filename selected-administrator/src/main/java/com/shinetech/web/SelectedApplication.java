@@ -12,6 +12,6 @@ public class SelectedApplication {
 
     public static void main(String[] args){
         SpringApplication.run(SelectedApplication.class,args);
-        System.out.println("===selected-crm 启动成功===");
+        System.out.println("===SHINETECH优选CRM启动成功===");
     }
 }
