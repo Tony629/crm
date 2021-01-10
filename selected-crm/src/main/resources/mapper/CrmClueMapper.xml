@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinetech.crm.mapper.CrmClueMapper">
+
+    <resultMap type="CrmClue" id="CrmClueResult">
+        <result property="clueId" column="clue_id"/>
+        <result property="name" column="name"/>
+        <result property="company" column="company"/>
+        <result property="address" column="address"/>
+        <result property="duty" column="duty"/>
+        <result property="mobile" column="mobile"/>
+        <result property="email" column="email"/>
+        <result property="qq" column="qq"/>
+        <result property="wechat" column="wechat"/>
+        <result property="wangwang" column="wangwang"/>
+        <result property="msn" column="msn"/>
+        <result property="sex" column="sex"/>
+        <result property="clueStatus" column="clue_status"/>
+        <result property="clueSource" column="clue_source"/>
+        <result property="decisionLevel" column="decision_level"/>
+        <result property="marketActivity" column="market_activity"/>
+        <result property="sourceBelongTo" column="source_belong_to"/>
+        <result property="belongTo" column="belong_to"/>
+        <result property="trasferDate" column="trasfer_date"/>
+        <result property="trasferTo" column="trasfer_to"/>
+        <result property="avatar" column="avatar"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <!--线索数据列表-->
+    <select id="selectCrmClueList" parameterType="CrmClue" resultMap="CrmClueResult">
+        SELECT p.clue_id, p.name, p.company, p.address, p.duty, p.mobile, p.email, p.qq, p.wechat, p.wangwang, p.msn,
+        p.sex, p.clue_source, p.decision_level, p.market_activity, p.source_belong_to, p.belong_to, p.trasfer_date,
+        p.trasfer_to, p.avatar, p.del_flag, p.create_by, p.create_time, p.update_by, p.update_time, p.remark, p.clue_status
+        FROM crm_clue p
+        LEFT JOIN sys_user u ON u.login_name=p.belong_to
+        LEFT JOIN sys_dept d ON u.dept_id=d.dept_id
+        <where>
+            p.del_flag='0'
+        </where>
+    </select>
+
+    <select id="selectCrmClueById" parameterType="Long" resultMap="CrmClueResult">
+        SELECT p.clue_id, p.name, p.company, p.address, p.duty, p.mobile, p.email, p.qq, p.wechat, p.wangwang, p.msn,
+        p.sex, p.clue_source, p.decision_level, p.market_activity, p.source_belong_to, p.belong_to, p.trasfer_date,
+        p.trasfer_to, p.avatar, p.del_flag, p.create_by, p.create_time, p.update_by, p.update_time, p.remark, p.clue_status
+        FROM crm_clue p
+        LEFT JOIN sys_user u ON u.login_name=p.belong_to
+        LEFT JOIN sys_dept d ON u.dept_id=d.dept_id
+        WHERE p.clue_id = #{clueId}
+    </select>
+
+    <insert id="insertCrmClue" parameterType="CrmClue" useGeneratedKeys="true" keyProperty="clueId">
+        insert into crm_clue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="company != null  and company != ''">company,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="duty != null  and duty != ''">duty,</if>
+            <if test="mobile != null  and mobile != ''">mobile,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="qq != null  and qq != ''">qq,</if>
+            <if test="wechat != null  and wechat != ''">wechat,</if>
+            <if test="wangwang != null  and wangwang != ''">wangwang,</if>
+            <if test="msn != null  and msn != ''">msn,</if>
+            <if test="sex != null  and sex != ''">sex,</if>
+            <if test="clueStatus != null  and clueStatus != ''">clue_status,</if>
+            <if test="clueSource != null  and clueSource != ''">clue_source,</if>
+            <if test="decisionLevel != null  and decisionLevel != ''">decision_level,</if>
+            <if test="marketActivity != null  and marketActivity != ''">market_activity,</if>
+            <if test="sourceBelongTo != null  and sourceBelongTo != ''">source_belong_to,</if>
+            <if test="belongTo != null  and belongTo != ''">belong_to,</if>
+            <if test="trasferDate != null ">trasfer_date,</if>
+            <if test="trasferTo != null  and trasferTo != ''">trasfer_to,</if>
+            <if test="avatar != null  and avatar != ''">avatar,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="company != null  and company != ''">#{company},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="duty != null  and duty != ''">#{duty},</if>
+            <if test="mobile != null  and mobile != ''">#{mobile},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="qq != null  and qq != ''">#{qq},</if>
+            <if test="wechat != null  and wechat != ''">#{wechat},</if>
+            <if test="wangwang != null  and wangwang != ''">#{wangwang},</if>
+            <if test="msn != null  and msn != ''">#{msn},</if>
+            <if test="sex != null  and sex != ''">#{sex},</if>
+            <if test="clueStatus != null  and clueStatus != ''">#{clueStatus},</if>
+            <if test="clueSource != null  and clueSource != ''">#{clueSource},</if>
+            <if test="decisionLevel != null  and decisionLevel != ''">#{decisionLevel},</if>
+            <if test="marketActivity != null  and marketActivity != ''">#{marketActivity},</if>
+            <if test="sourceBelongTo != null  and sourceBelongTo != ''">#{sourceBelongTo},</if>
+            <if test="belongTo != null  and belongTo != ''">#{belongTo},</if>
+            <if test="trasferDate != null ">#{trasferDate},</if>
+            <if test="trasferTo != null  and trasferTo != ''">#{trasferTo},</if>
+            <if test="avatar != null  and avatar != ''">#{avatar},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCrmClue" parameterType="CrmClue">
+        update crm_clue
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="company != null and company != ''">company = #{company},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="duty != null and duty != ''">duty = #{duty},</if>
+            <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="qq != null and qq != ''">qq = #{qq},</if>
+            <if test="wechat != null and wechat != ''">wechat = #{wechat},</if>
+            <if test="wangwang != null and wangwang != ''">wangwang = #{wangwang},</if>
+            <if test="msn != null and msn != ''">msn = #{msn},</if>
+            <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="clueStatus != null and clueStatus != ''">clue_status = #{clueStatus},</if>
+            <if test="clueSource != null and clueSource != ''">clue_source = #{clueSource},</if>
+            <if test="decisionLevel != null and decisionLevel != ''">decision_level = #{decisionLevel},</if>
+            <if test="marketActivity != null and marketActivity != ''">market_activity = #{marketActivity},</if>
+            <if test="sourceBelongTo != null and sourceBelongTo != ''">source_belong_to = #{sourceBelongTo},</if>
+            <if test="belongTo != null">belong_to = #{belongTo},</if>
+            <if test="trasferDate != null ">trasfer_date = #{trasferDate},</if>
+            <if test="trasferTo != null and trasferTo != ''">trasfer_to = #{trasferTo},</if>
+            <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+            <if test="delFlag != null and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+        </trim>
+        where clue_id = #{clueId}
+    </update>
+
+    <update id="cancelCrmClueById">
+        update crm_clue set clue_status=#{isCancel} where clue_id = #{clueId}
+    </update>
+
+    <delete id="deleteCrmClue" parameterType="Long">
+        delete from crm_clue where clue_id = #{clueId}
+    </delete>
+
+    <delete id="batchDeleteCrmClue" parameterType="String">
+        delete from crm_clue where clue_id in
+        <foreach item="clueId" collection="array" open="(" separator="," close=")">
+            #{clueId}
+        </foreach>
+    </delete>
+
+</mapper>
