@@ -23,13 +23,18 @@ public class CrmClueController {
     }
 
     @GetMapping("/list")
-    public Map list(@RequestParam("page") Integer pageIndex, @RequestParam("limit") Integer pageSize){
+    public Map list(@RequestParam("page") Integer page, @RequestParam("limit") Integer limit){
+
 
         Map map = new HashMap();
-        map.put("code",200);
+        map.put("code",0);
+        map.put("count",1000);
         map.put("msg","");
-        map.put("data","");
-        map.put("count",0);
+        map.put("data",""); //Object 集合
+
+        //request /?page=1&limit=10
+
+
         return map;
     }
 

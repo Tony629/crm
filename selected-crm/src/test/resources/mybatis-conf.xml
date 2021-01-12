@@ -13,7 +13,16 @@
 
     <typeAliases>
         <typeAlias type="com.shinetech.crm.domain.CrmClue" alias="CrmClue"/>
+        <typeAlias type="com.shinetech.crm.domain.CrmCustomer" alias="CrmCustomer"/>
+        <typeAlias type="com.shinetech.crm.domain.CrmOrder" alias="CrmOrder"/>
     </typeAliases>
+
+    <!--PageHelper分页插件配置-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <property name="helperDialect" value="mysql"/>
+        </plugin>
+    </plugins>
 
     <environments default="development">
         <environment id="development">
@@ -31,5 +40,6 @@
 
     <mappers>
         <mapper resource="mapper/CrmClueMapper.xml" />
+        <mapper resource="mapper/CrmCustomerMapper.xml"/>
     </mappers>
 </configuration>

@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinetech.crm.mapper.CrmCustomerMapper">
+    <resultMap type="CrmCustomer" id="CrmCustomerResult">
+        <result property="customerId" column="customer_id"/>
+        <result property="customerName" column="customer_name"/>
+        <result property="nameShort" column="name_short"/>
+        <result property="telephone" column="telephone"/>
+        <result property="mobile" column="mobile"/>
+        <result property="email" column="email"/>
+        <result property="fax" column="fax"/>
+        <result property="website" column="website"/>
+        <result property="zip" column="zip"/>
+        <result property="country" column="country"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="region" column="region"/>
+        <result property="address" column="address"/>
+        <result property="intrestedProdcut" column="intrested_prodcut"/>
+        <result property="industry" column="industry"/>
+        <result property="customerStatus" column="customer_status"/>
+        <result property="customerSource" column="customer_source"/>
+        <result property="customerDegree" column="customer_degree"/>
+        <result property="customerPriority" column="customer_priority"/>
+        <result property="customerCredit" column="customer_credit"/>
+        <result property="customerType" column="customer_type"/>
+        <result property="customerMaturity" column="customer_maturity"/>
+        <result property="customerCategory" column="customer_category"/>
+        <result property="annualIncome" column="annual_income"/>
+        <result property="getDate" column="get_date"/>
+        <result property="sourceBelongTo" column="source_belong_to"/>
+        <result property="belongTo" column="belong_to"/>
+        <result property="trasferDate" column="trasfer_date"/>
+        <result property="trasferTo" column="trasfer_to"/>
+        <result property="isShare" column="is_share"/>
+        <result property="shareDate" column="share_date"/>
+        <result property="avatar" column="avatar"/>
+        <result property="qq" column="qq"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectCrmCustomerVo">
+        SELECT c.customer_id, c.customer_name, c.name_short, c.telephone, c.mobile, c.email, c.fax, c.website, c.zip,
+        c.country, c.province, c.city, c.region, c.address, c.intrested_prodcut, c.industry, c.customer_status, c.customer_source, c.customer_degree, c.customer_priority, c.customer_credit, c.customer_type, c.customer_maturity,c.customer_category ,c.annual_income, c.get_date, c.source_belong_to, c.belong_to, c.trasfer_date, c.trasfer_to,c.share_date, c.is_share, c.avatar, c.qq, c.del_flag, c.create_by, c.create_time, c.update_by,c. update_time, c.remark
+        FROM crm_customer c
+    	LEFT JOIN sys_user u ON u.login_name=c.belong_to
+    	LEFT JOIN sys_dept d ON u.dept_id=d.dept_id
+    </sql>
+
+    <!-- 全部客户 -->
+    <select id="selectCrmCustomerList" parameterType="CrmCustomer" resultMap="CrmCustomerResult">
+        <include refid="selectCrmCustomerVo"/>
+        <where>
+            c.del_flag='0'
+            <if test="customerName != null  and customerName != ''">and c.customer_name like concat('%',
+                #{customerName}, '%')
+            </if>
+            <if test="nameShort != null  and nameShort != ''">and c.name_short like concat('%', #{nameShort}, '%')</if>
+            <if test="telephone != null  and telephone != ''">and tc.elephone like concat('%', #{telephone}, '%')</if>
+            <if test="mobile != null  and mobile != ''">and c.mobile like concat('%', #{mobile}, '%')</if>
+            <if test="email != null  and email != ''">and c.email like concat('%', #{email}, '%')</if>
+            <if test="address != null  and address != ''">and c.address like concat('%', #{address}, '%')</if>
+            <if test="industry != null  and industry != ''">and c.industry = #{industry}</if>
+            <if test="customerStatus != null  and customerStatus != ''">and c.customer_status = #{customerStatus}</if>
+            <if test="customerSource != null  and customerSource != ''">and c.customer_source = #{customerSource}</if>
+            <if test="customerDegree != null  and customerDegree != ''">and c.customer_degree = #{customerDegree}</if>
+            <if test="customerPriority != null  and customerPriority != ''">and c.customer_priority =
+                #{customerPriority}
+            </if>
+            <if test="customerCredit != null  and customerCredit != ''">and c.customer_credit = #{customerCredit}</if>
+            <if test="customerType != null  and customerType != ''">and c.customer_type = #{customerType}</if>
+            <if test="customerCategory != null  and customerCategory != ''">and customer_category =
+                #{customerCategory}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(c.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(c.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+
+    <!-- 我的客户 -->
+    <select id="selectCrmCustomerListMy" parameterType="CrmCustomer" resultMap="CrmCustomerResult">
+        <include refid="selectCrmCustomerVo"/>
+        <where>
+            c.del_flag='0'
+            <if test="customerName != null  and customerName != ''">and c.customer_name like concat('%',
+                #{customerName}, '%')
+            </if>
+            <if test="nameShort != null  and nameShort != ''">and c.name_short like concat('%', #{nameShort}, '%')</if>
+            <if test="telephone != null  and telephone != ''">and tc.elephone like concat('%', #{telephone}, '%')</if>
+            <if test="mobile != null  and mobile != ''">and c.mobile like concat('%', #{mobile}, '%')</if>
+            <if test="email != null  and email != ''">and c.email like concat('%', #{email}, '%')</if>
+            <if test="address != null  and address != ''">and c.address like concat('%', #{address}, '%')</if>
+            <if test="industry != null  and industry != ''">and c.industry = #{industry}</if>
+            <if test="customerStatus != null  and customerStatus != ''">and c.customer_status = #{customerStatus}</if>
+            <if test="customerSource != null  and customerSource != ''">and c.customer_source = #{customerSource}</if>
+            <if test="customerDegree != null  and customerDegree != ''">and c.customer_degree = #{customerDegree}</if>
+            <if test="customerPriority != null  and customerPriority != ''">and c.customer_priority =
+                #{customerPriority}
+            </if>
+            <if test="customerCredit != null  and customerCredit != ''">and c.customer_credit = #{customerCredit}</if>
+            <if test="customerType != null  and customerType != ''">and c.customer_type = #{customerType}</if>
+            <if test="customerCategory != null  and customerCategory != ''">and customer_category =
+                #{customerCategory}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(c.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(c.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+        <if test="params.top != null and params.top != ''"><!-- top检索 -->
+            LIMIT #{params.top}
+        </if>
+    </select>
+
+    <!-- 共享客户 -->
+    <select id="selectCrmCustomerListShare" parameterType="CrmCustomer" resultMap="CrmCustomerResult">
+        <include refid="selectCrmCustomerVo"/>
+        <where>
+            c.del_flag='0'
+            <if test="customerName != null  and customerName != ''">and c.customer_name like concat('%',
+                #{customerName}, '%')
+            </if>
+            <if test="nameShort != null  and nameShort != ''">and c.name_short like concat('%', #{nameShort}, '%')</if>
+            <if test="telephone != null  and telephone != ''">and tc.elephone like concat('%', #{telephone}, '%')</if>
+            <if test="mobile != null  and mobile != ''">and c.mobile like concat('%', #{mobile}, '%')</if>
+            <if test="email != null  and email != ''">and c.email like concat('%', #{email}, '%')</if>
+            <if test="address != null  and address != ''">and c.address like concat('%', #{address}, '%')</if>
+            <if test="industry != null  and industry != ''">and c.industry = #{industry}</if>
+            <if test="customerStatus != null  and customerStatus != ''">and c.customer_status = #{customerStatus}</if>
+            <if test="customerSource != null  and customerSource != ''">and c.customer_source = #{customerSource}</if>
+            <if test="customerDegree != null  and customerDegree != ''">and c.customer_degree = #{customerDegree}</if>
+            <if test="customerPriority != null  and customerPriority != ''">and c.customer_priority =
+                #{customerPriority}
+            </if>
+            <if test="customerCredit != null  and customerCredit != ''">and c.customer_credit = #{customerCredit}</if>
+            <if test="customerType != null  and customerType != ''">and c.customer_type = #{customerType}</if>
+            <if test="customerCategory != null  and customerCategory != ''">and customer_category =
+                #{customerCategory}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(c.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(c.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            AND c.is_share="1"
+        </where>
+    </select>
+
+    <!-- 公共客户 -->
+    <select id="selectCrmCustomerListPublic" parameterType="CrmCustomer" resultMap="CrmCustomerResult">
+        <include refid="selectCrmCustomerVo"/>
+        <where>
+            c.del_flag='0'
+            <if test="customerName != null  and customerName != ''">and c.customer_name like concat('%',
+                #{customerName}, '%')
+            </if>
+            <if test="nameShort != null  and nameShort != ''">and c.name_short like concat('%', #{nameShort}, '%')</if>
+            <if test="telephone != null  and telephone != ''">and tc.elephone like concat('%', #{telephone}, '%')</if>
+            <if test="mobile != null  and mobile != ''">and c.mobile like concat('%', #{mobile}, '%')</if>
+            <if test="email != null  and email != ''">and c.email like concat('%', #{email}, '%')</if>
+            <if test="address != null  and address != ''">and c.address like concat('%', #{address}, '%')</if>
+            <if test="industry != null  and industry != ''">and c.industry = #{industry}</if>
+            <if test="customerStatus != null  and customerStatus != ''">and c.customer_status = #{customerStatus}</if>
+            <if test="customerSource != null  and customerSource != ''">and c.customer_source = #{customerSource}</if>
+            <if test="customerDegree != null  and customerDegree != ''">and c.customer_degree = #{customerDegree}</if>
+            <if test="customerPriority != null  and customerPriority != ''">and c.customer_priority =
+                #{customerPriority}
+            </if>
+            <if test="customerCredit != null  and customerCredit != ''">and c.customer_credit = #{customerCredit}</if>
+            <if test="customerType != null  and customerType != ''">and c.customer_type = #{customerType}</if>
+            <if test="customerCategory != null  and customerCategory != ''">and customer_category =
+                #{customerCategory}
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(c.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(c.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            AND (c.belong_to='' OR c.belong_to is null)
+        </where>
+    </select>
+
+    <select id="selectCrmCustomerById" parameterType="Long" resultMap="CrmCustomerResult">
+        <include refid="selectCrmCustomerVo"/>
+        where c.customer_id = #{customerId}
+    </select>
+
+    <select id="selectCrmCustomerByName" parameterType="String" resultMap="CrmCustomerResult">
+        <include refid="selectCrmCustomerVo"/>
+        where c.customer_name = #{customerName}
+    </select>
+
+    <select id="checkEmailUnique" parameterType="String" resultMap="CrmCustomerResult">
+        <include refid="selectCrmCustomerVo"/>
+        where c.email = #{email}
+    </select>
+
+    <select id="checkTelephoneUnique" parameterType="String" resultMap="CrmCustomerResult">
+        <include refid="selectCrmCustomerVo"/>
+        where c.telephone = #{telephone}
+    </select>
+
+    <select id="checkMobileUnique" parameterType="String" resultMap="CrmCustomerResult">
+        <include refid="selectCrmCustomerVo"/>
+        where c.mobile = #{mobile}
+    </select>
+
+    <!-- 查询超过30天未跟进的客户 -->
+    <select id="selectCrmCustomerListFollowMoreThan30" resultMap="CrmCustomerResult">
+        select c.customer_id, c.customer_name, c.name_short, c.telephone, c.mobile, c.email, c.fax, c.website, c.zip, c.country, c.province, c.city, c.region, c.address, c.intrested_prodcut, c.industry, c.customer_status, c.customer_source, c.customer_degree, c.customer_priority, c.customer_credit, c.customer_type, c.customer_maturity,c.customer_category ,c.annual_income, c.get_date, c.source_belong_to, c.belong_to, c.trasfer_date, c.trasfer_to,c.share_date, c.is_share, c.avatar, c.qq, c.del_flag, c.create_by, c.create_time, c.update_by,c. update_time, c.remark
+		FROM
+			crm_customer c
+			LEFT JOIN crm_follow p ON p.customer_id = c.customer_id
+			where p.follow_date is not null and  DATEDIFF(now(), p.follow_date)>30 and c.del_flag='0'
+		ORDER BY
+			p.follow_date DESC
+    </select>
+
+    <!-- 查询未跟进过的客户 -->
+    <select id="selectCrmCustomerListNoFollow" resultMap="CrmCustomerResult">
+        select c.customer_id, c.customer_name, c.name_short, c.telephone, c.mobile, c.email, c.fax, c.website, c.zip, c.country, c.province, c.city, c.region, c.address, c.intrested_prodcut, c.industry, c.customer_status, c.customer_source, c.customer_degree, c.customer_priority, c.customer_credit, c.customer_type, c.customer_maturity,c.customer_category ,c.annual_income, c.get_date, c.source_belong_to, c.belong_to, c.trasfer_date, c.trasfer_to,c.share_date, c.is_share, c.avatar, c.qq, c.del_flag, c.create_by, c.create_time, c.update_by,c. update_time, c.remark
+		FROM
+			crm_customer c
+			LEFT JOIN crm_follow p ON p.customer_id = c.customer_id
+			where p.follow_date is null and DATEDIFF(now(), c.create_time)>30  and c.del_flag='0'
+    </select>
+
+    <insert id="insertCrmCustomer" parameterType="CrmCustomer" useGeneratedKeys="true" keyProperty="customerId">
+        insert into crm_customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerName != null  and customerName != ''">customer_name,</if>
+            <if test="nameShort != null  and nameShort != ''">name_short,</if>
+            <if test="telephone != null  and telephone != ''">telephone,</if>
+            <if test="mobile != null  and mobile != ''">mobile,</if>
+            <if test="email != null  and email != ''">email,</if>
+            <if test="fax != null  and fax != ''">fax,</if>
+            <if test="website != null  and website != ''">website,</if>
+            <if test="zip != null  and zip != ''">zip,</if>
+            <if test="country != null  and country != ''">country,</if>
+            <if test="province != null  and province != ''">province,</if>
+            <if test="city != null  and city != ''">city,</if>
+            <if test="region != null  and region != ''">region,</if>
+            <if test="address != null  and address != ''">address,</if>
+            <if test="intrestedProdcut != null  and intrestedProdcut != ''">intrested_prodcut,</if>
+            <if test="industry != null  and industry != ''">industry,</if>
+            <if test="customerStatus != null  and customerStatus != ''">customer_status,</if>
+            <if test="customerSource != null  and customerSource != ''">customer_source,</if>
+            <if test="customerDegree != null  and customerDegree != ''">customer_degree,</if>
+            <if test="customerPriority != null  and customerPriority != ''">customer_priority,</if>
+            <if test="customerCredit != null  and customerCredit != ''">customer_credit,</if>
+            <if test="customerType != null  and customerType != ''">customer_type,</if>
+            <if test="customerMaturity != null  and customerMaturity != ''">customer_maturity,</if>
+            <if test="annualIncome != null  and annualIncome != ''">annual_income,</if>
+            <if test="getDate != null ">get_date,</if>
+            <if test="sourceBelongTo != null  and sourceBelongTo != ''">source_belong_to,</if>
+            <if test="belongTo != null  and belongTo != ''">belong_to,</if>
+            <if test="trasferDate != null ">trasfer_date,</if>
+            <if test="trasferTo != null  and trasferTo != ''">trasfer_to,</if>
+            <if test="isShare != null  and isShare != ''">is_share,</if>
+            <if test="shareDate != null">share_date,</if>
+            <if test="avatar != null  and avatar != ''">avatar,</if>
+            <if test="qq != null  and qq != ''">qq,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="customerCategory != null  and customerCategory != ''">customer_category,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerName != null  and customerName != ''">#{customerName},</if>
+            <if test="nameShort != null  and nameShort != ''">#{nameShort},</if>
+            <if test="telephone != null  and telephone != ''">#{telephone},</if>
+            <if test="mobile != null  and mobile != ''">#{mobile},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+            <if test="fax != null  and fax != ''">#{fax},</if>
+            <if test="website != null  and website != ''">#{website},</if>
+            <if test="zip != null  and zip != ''">#{zip},</if>
+            <if test="country != null  and country != ''">#{country},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="region != null  and region != ''">#{region},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="intrestedProdcut != null  and intrestedProdcut != ''">#{intrestedProdcut},</if>
+            <if test="industry != null  and industry != ''">#{industry},</if>
+            <if test="customerStatus != null  and customerStatus != ''">#{customerStatus},</if>
+            <if test="customerSource != null  and customerSource != ''">#{customerSource},</if>
+            <if test="customerDegree != null  and customerDegree != ''">#{customerDegree},</if>
+            <if test="customerPriority != null  and customerPriority != ''">#{customerPriority},</if>
+            <if test="customerCredit != null  and customerCredit != ''">#{customerCredit},</if>
+            <if test="customerType != null  and customerType != ''">#{customerType},</if>
+            <if test="customerMaturity != null  and customerMaturity != ''">#{customerMaturity},</if>
+            <if test="annualIncome != null  and annualIncome != ''">#{annualIncome},</if>
+            <if test="getDate != null ">#{getDate},</if>
+            <if test="sourceBelongTo != null  and sourceBelongTo != ''">#{sourceBelongTo},</if>
+            <if test="belongTo != null  and belongTo != ''">#{belongTo},</if>
+            <if test="trasferDate != null ">#{trasferDate},</if>
+            <if test="trasferTo != null  and trasferTo != ''">#{trasferTo},</if>
+            <if test="isShare != null  and isShare != ''">#{isShare},</if>
+            <if test="shareDate != null">#{shareDate},</if>
+            <if test="avatar != null  and avatar != ''">#{avatar},</if>
+            <if test="qq != null  and qq != ''">#{qq},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="customerCategory != null  and customerCategory != ''">#{customerCategory},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCrmCustomer" parameterType="CrmCustomer">
+        update crm_customer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerName != null  and customerName != ''">customer_name = #{customerName},</if>
+            <if test="nameShort != null  and nameShort != ''">name_short = #{nameShort},</if>
+            <if test="telephone != null  and telephone != ''">telephone = #{telephone},</if>
+            <if test="mobile != null  and mobile != ''">mobile = #{mobile},</if>
+            <if test="email != null  and email != ''">email = #{email},</if>
+            <if test="fax != null  and fax != ''">fax = #{fax},</if>
+            <if test="website != null  and website != ''">website = #{website},</if>
+            <if test="zip != null  and zip != ''">zip = #{zip},</if>
+            <if test="country != null  and country != ''">country = #{country},</if>
+            <if test="province != null  and province != ''">province = #{province},</if>
+            <if test="city != null  and city != ''">city = #{city},</if>
+            <if test="region != null  and region != ''">region = #{region},</if>
+            <if test="address != null  and address != ''">address = #{address},</if>
+            <if test="intrestedProdcut != null  and intrestedProdcut != ''">intrested_prodcut = #{intrestedProdcut},
+            </if>
+            <if test="industry != null  and industry != ''">industry = #{industry},</if>
+            <if test="customerStatus != null  and customerStatus != ''">customer_status = #{customerStatus},</if>
+            <if test="customerSource != null  and customerSource != ''">customer_source = #{customerSource},</if>
+            <if test="customerDegree != null  and customerDegree != ''">customer_degree = #{customerDegree},</if>
+            <if test="customerPriority != null  and customerPriority != ''">customer_priority = #{customerPriority},
+            </if>
+            <if test="customerCredit != null  and customerCredit != ''">customer_credit = #{customerCredit},</if>
+            <if test="customerType != null  and customerType != ''">customer_type = #{customerType},</if>
+            <if test="customerMaturity != null  and customerMaturity != ''">customer_maturity = #{customerMaturity},
+            </if>
+            <if test="annualIncome != null  and annualIncome != ''">annual_income = #{annualIncome},</if>
+            <if test="getDate != null ">get_date = #{getDate},</if>
+            <if test="sourceBelongTo != null  and sourceBelongTo != ''">source_belong_to = #{sourceBelongTo},</if>
+            <if test="belongTo != null">belong_to = #{belongTo},</if>
+            <if test="trasferDate != null ">trasfer_date = #{trasferDate},</if>
+            <if test="trasferTo != null  and trasferTo != ''">trasfer_to = #{trasferTo},</if>
+            <if test="isShare != null  and isShare != ''">is_share = #{isShare},</if>
+            <if test="shareDate != null">share_date =#{shareDate},</if>
+            <if test="avatar != null  and avatar != ''">avatar = #{avatar},</if>
+            <if test="qq != null  and qq != ''">qq = #{qq},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="customerCategory != null  and customerCategory != ''">customer_category = #{customerCategory},
+            </if>
+        </trim>
+        where customer_id = #{customerId}
+    </update>
+
+    <delete id="deleteCrmCustomerById" parameterType="Long">
+        update crm_customer set del_flag="1" where customer_id = #{customerId}
+    </delete>
+
+    <delete id="deleteCrmCustomerByIds" parameterType="String">
+        update crm_customer set del_flag="1" where customer_id in
+        <foreach item="customerId" collection="array" open="(" separator="," close=")">
+            #{customerId}
+        </foreach>
+    </delete>
+
+</mapper>

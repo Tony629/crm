@@ -13,11 +13,11 @@ public interface CrmClueMapper {
 
     CrmClue selectCrmClueById(Long id);
 
+    List<CrmClue> selectCrmClueByMobile(String mobile);
+
     int insertCrmClue(CrmClue crmClue);
 
     int updateCrmClue(CrmClue crmClue);
-
-    int cancelCrmClueById(Long id);
 
     int deleteCrmClue(Long id);
 
