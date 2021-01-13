@@ -1,0 +1,63 @@
+package com.shinetech.web.config;
+
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+import com.zaxxer.hikari.HikariDataSource;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+
+import javax.sql.DataSource;
+
+@Configuration
+@MapperScan(basePackages = {"com.shinetech.crm.mapper"})
+public class MyBatisConfig {
+
+//    @Bean
+//    @Primary
+//    @ConfigurationProperties("spring.datasource")
+//    public DataSource dataSource(){
+//        return DruidDataSourceBuilder.create().build();
+//    }
+
+    @Bean
+    @Primary
+    @ConfigurationProperties("spring.datasource")
+    public HikariDataSource dataSource(){
+        HikariDataSource dataSource = DataSourceBuilder.create().type(HikariDataSource.class).build();
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3307/selected-crm?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior\n" +
+                "      =convertToNull&useSSL=true&serverTimezone=UTC");
+        //dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setUsername("root");
+        dataSource.setPassword("000");
+
+        return dataSource;
+    }
+
+    @Bean
+    public SqlSessionFactory sqlSessionFactory() throws Exception {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(dataSource());
+
+        PathMatchingResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+        sqlSessionFactoryBean.setMapperLocations(resourcePatternResolver.getResources("classpath*:mapper/**/*Mapper" +
+                ".xml"));
+        sqlSessionFactoryBean.setTypeAliasesPackage("com.shinetech.crm.domain");
+        //sqlSessionFactoryBean.setConfigLocation("mybatis-config.xml");
+
+        return sqlSessionFactoryBean.getObject();
+    }
+
+    @Bean
+    public SqlSessionTemplate sqlSessionTemplate() throws Exception{
+        SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory());
+
+        return sqlSessionTemplate;
+    }
+}
