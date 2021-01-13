@@ -19,25 +19,11 @@ import javax.sql.DataSource;
 @MapperScan(basePackages = {"com.shinetech.crm.mapper"})
 public class MyBatisConfig {
 
-//    @Bean
-//    @Primary
-//    @ConfigurationProperties("spring.datasource")
-//    public DataSource dataSource(){
-//        return DruidDataSourceBuilder.create().build();
-//    }
-
     @Bean
     @Primary
     @ConfigurationProperties("spring.datasource")
-    public HikariDataSource dataSource(){
-        HikariDataSource dataSource = DataSourceBuilder.create().type(HikariDataSource.class).build();
-        dataSource.setJdbcUrl("jdbc:mysql://localhost:3307/selected-crm?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior\n" +
-                "      =convertToNull&useSSL=true&serverTimezone=UTC");
-        //dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUsername("root");
-        dataSource.setPassword("000");
-
-        return dataSource;
+    public DataSource dataSource(){
+        return DruidDataSourceBuilder.create().build();
     }
 
     @Bean
