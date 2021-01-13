@@ -59,31 +59,25 @@
         <include refid="selectCrmCustomerVo"/>
         <where>
             c.del_flag='0'
-            <if test="customerName != null  and customerName != ''">and c.customer_name like concat('%',
+            <if test="customerName != null and customerName != ''">and c.customer_name like concat('%',
                 #{customerName}, '%')
             </if>
-            <if test="nameShort != null  and nameShort != ''">and c.name_short like concat('%', #{nameShort}, '%')</if>
-            <if test="telephone != null  and telephone != ''">and tc.elephone like concat('%', #{telephone}, '%')</if>
-            <if test="mobile != null  and mobile != ''">and c.mobile like concat('%', #{mobile}, '%')</if>
-            <if test="email != null  and email != ''">and c.email like concat('%', #{email}, '%')</if>
-            <if test="address != null  and address != ''">and c.address like concat('%', #{address}, '%')</if>
-            <if test="industry != null  and industry != ''">and c.industry = #{industry}</if>
-            <if test="customerStatus != null  and customerStatus != ''">and c.customer_status = #{customerStatus}</if>
-            <if test="customerSource != null  and customerSource != ''">and c.customer_source = #{customerSource}</if>
-            <if test="customerDegree != null  and customerDegree != ''">and c.customer_degree = #{customerDegree}</if>
-            <if test="customerPriority != null  and customerPriority != ''">and c.customer_priority =
+            <if test="nameShort != null and nameShort != ''">and c.name_short like concat('%', #{nameShort}, '%')</if>
+            <if test="telephone != null and telephone != ''">and tc.elephone like concat('%', #{telephone}, '%')</if>
+            <if test="mobile != null and mobile != ''">and c.mobile like concat('%', #{mobile}, '%')</if>
+            <if test="email != null and email != ''">and c.email like concat('%', #{email}, '%')</if>
+            <if test="address != null and address != ''">and c.address like concat('%', #{address}, '%')</if>
+            <if test="industry != null and industry != ''">and c.industry = #{industry}</if>
+            <if test="customerStatus != null and customerStatus != ''">and c.customer_status = #{customerStatus}</if>
+            <if test="customerSource != null and customerSource != ''">and c.customer_source = #{customerSource}</if>
+            <if test="customerDegree != null and customerDegree != ''">and c.customer_degree = #{customerDegree}</if>
+            <if test="customerPriority != null and customerPriority != ''">and c.customer_priority =
                 #{customerPriority}
             </if>
-            <if test="customerCredit != null  and customerCredit != ''">and c.customer_credit = #{customerCredit}</if>
-            <if test="customerType != null  and customerType != ''">and c.customer_type = #{customerType}</if>
-            <if test="customerCategory != null  and customerCategory != ''">and customer_category =
+            <if test="customerCredit != null and customerCredit != ''">and c.customer_credit = #{customerCredit}</if>
+            <if test="customerType != null and customerType != ''">and c.customer_type = #{customerType}</if>
+            <if test="customerCategory != null and customerCategory != ''">and customer_category =
                 #{customerCategory}
-            </if>
-            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(c.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-            </if>
-            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(c.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
         </where>
     </select>
@@ -113,14 +107,6 @@
             <if test="customerCategory != null  and customerCategory != ''">and customer_category =
                 #{customerCategory}
             </if>
-            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(c.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-            </if>
-            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(c.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
-            </if>
-            <!-- 数据范围过滤 -->
-            ${params.dataScope}
         </where>
         <if test="params.top != null and params.top != ''"><!-- top检索 -->
             LIMIT #{params.top}
@@ -151,12 +137,6 @@
             <if test="customerType != null  and customerType != ''">and c.customer_type = #{customerType}</if>
             <if test="customerCategory != null  and customerCategory != ''">and customer_category =
                 #{customerCategory}
-            </if>
-            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(c.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-            </if>
-            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(c.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
             AND c.is_share="1"
         </where>
@@ -379,14 +359,18 @@
     </update>
 
     <delete id="deleteCrmCustomerById" parameterType="Long">
-        update crm_customer set del_flag="1" where customer_id = #{customerId}
+        delete from crm_customer where customer_id = #{customerId}
     </delete>
 
     <delete id="deleteCrmCustomerByIds" parameterType="String">
-        update crm_customer set del_flag="1" where customer_id in
+        delete from crm_customer  where customer_id in
         <foreach item="customerId" collection="array" open="(" separator="," close=")">
             #{customerId}
         </foreach>
     </delete>
+
+    <update id="truncateTable">
+        truncate table crm_customer;
+    </update>
 
 </mapper>
